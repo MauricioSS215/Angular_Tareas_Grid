@@ -57,9 +57,8 @@ Las páginas de edición leen el ID de la URL con `ActivatedRoute`, lo convierte
 
 ## Comprobar la entrega
 
-```powershell
-npm run build
-npm test -- --watch=false
+```CDM
+npm run start
 ```
 
 ## Prueba manual
