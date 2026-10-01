@@ -1,0 +1,25 @@
+<h2>Usuarios</h2>
+<a routerLink="/usuarios/create">Crear usuario</a>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th><th>Nombre</th><th>Apellido</th><th>Username</th><th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (usuario of usuarios; track usuario.id_usuario) {
+      <tr>
+        <td>{{ usuario.id_usuario }}</td>
+        <td>{{ usuario.nombre }}</td>
+        <td>{{ usuario.apellido }}</td>
+        <td>{{ usuario.username }}</td>
+        <td>
+          <button type="button" [routerLink]="['/usuarios', usuario.id_usuario]">Editar</button>
+          <button type="button" (click)="eliminarUsuario(usuario)">Eliminar</button>
+        </td>
+      </tr>
+    } @empty {
+      <tr><td colspan="5">No se encontraron usuarios registrados.</td></tr>
+    }
+  </tbody>
+</table>

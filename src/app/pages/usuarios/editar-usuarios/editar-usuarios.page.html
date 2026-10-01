@@ -1,0 +1,8 @@
+<h2>Editar usuario</h2>
+@if (usuario(); as actual) {
+  <p>ID: {{ actual.id_usuario }}</p>
+  <app-usuario-form [usuarioInicial]="actual" (guardarUsuario)="onGuardarUsuario($event)" />
+} @else {
+  <p>No se encontró el usuario solicitado.</p>
+}
+<a routerLink="/usuarios">Volver a usuarios</a>

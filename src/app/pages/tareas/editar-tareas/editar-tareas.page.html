@@ -1,0 +1,8 @@
+<h2>Editar tarea</h2>
+@if (tarea(); as actual) {
+  <p>ID: {{ actual.id_tarea }}</p>
+  <app-tarea-form [tareaInicial]="actual" (guardarTarea)="onGuardarTarea($event)" />
+} @else {
+  <p>No se encontró la tarea solicitada.</p>
+}
+<a routerLink="/tareas">Volver a tareas</a>

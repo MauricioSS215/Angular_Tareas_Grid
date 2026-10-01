@@ -1,0 +1,14 @@
+<form novalidate (submit)="submitForm($event)">
+  <label for="nombre">Nombre:</label>
+  <input id="nombre" type="text" [formField]="usuarioForm.nombre" />
+  <br />
+  <label for="apellido">Apellido:</label>
+  <input id="apellido" type="text" [formField]="usuarioForm.apellido" />
+  <br />
+  <label for="username">Username:</label>
+  <input id="username" type="text" [formField]="usuarioForm.username" />
+  <br />
+  <button type="submit">Guardar</button>
+</form>
+<p>Valores del formulario:</p>
+<pre>{{ usuarioForm().value() | json }}</pre>

@@ -1,0 +1,35 @@
+#app-layout{
+  display:flex;
+  flex-direction:column;
+  min-height: 100vh
+}
+
+#app-header{
+  background-color: black;
+  color:white
+}
+#app-medio{
+  display:flex;
+  flex:1;
+}
+
+#app-footer{
+  background-color:cyan;
+
+}
+
+#app-sidebar {
+  width:240px;
+  background-color:gainsboro ;
+  height: 80vh;
+}
+
+#app-page{
+  flex:1;
+  overflow-y:auto;
+}
+
+html, body{
+  margin:0;
+  padding:0;
+}

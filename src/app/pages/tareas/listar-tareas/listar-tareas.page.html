@@ -1,0 +1,32 @@
+<h2>Tareas</h2>
+<a routerLink="/tareas/create">Crear tarea</a>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th><th>Creador</th><th>Título</th><th>Descripción</th>
+      <th>Grupo</th><th>Prioridad</th><th>Creada</th><th>Terminada</th><th>Estado</th><th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (tarea of tareas; track tarea.id_tarea) {
+      <tr>
+        <td>{{ tarea.id_tarea }}</td>
+        <td>{{ tarea.id_creador }}</td>
+        <td>{{ tarea.titulo }}</td>
+        <td>{{ tarea.descripcion }}</td>
+        <td>{{ tarea.grupo }}</td>
+        <td>{{ tarea.prioridad }}</td>
+        <td>{{ tarea.creada | date: 'dd/MM/yyyy HH:mm' : 'UTC' }} UTC</td>
+        <td>{{ tarea.terminada ? (tarea.terminada | date: 'dd/MM/yyyy HH:mm' : 'UTC') + ' UTC' : 'Pendiente' }}</td>
+        <td>{{ tarea.estado }}</td>
+        <td>
+          <button type="button" [routerLink]="['/tareas', tarea.id_tarea]">Editar</button>
+          <button type="button" (click)="finalizarTarea(tarea)" [disabled]="tarea.terminada !== null">Finalizar</button>
+          <button type="button" (click)="eliminarTarea(tarea)">Eliminar</button>
+        </td>
+      </tr>
+    } @empty {
+      <tr><td colspan="10">No se encontraron tareas registradas.</td></tr>
+    }
+  </tbody>
+</table>
