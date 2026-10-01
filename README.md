@@ -15,9 +15,8 @@ Se necesita Node.js. Versión usada: 24.19.0.
 
 Abrir una terminal en la carpeta que contiene este README y package.json:
 
-```powershell
-npm ci
-npm start
+```CDM
+npm run start o ng serve
 ```
 
 Abrir http://localhost:4200. Para detener el servidor: Ctrl+C.
@@ -53,13 +52,6 @@ La copia permite escribir en el formulario sin cambiar el registro de la lista.
 
 Las páginas de edición leen el ID de la URL con `ActivatedRoute`, lo convierten a número y buscan el registro con `find`. `subscribe` permite repetir la búsqueda si cambia el ID. Al salir de la página, `ngOnDestroy` cancela esa suscripción.
 
-
-
-## Comprobar la entrega
-
-```CDM
-npm run start
-```
 
 ## Prueba manual
 
