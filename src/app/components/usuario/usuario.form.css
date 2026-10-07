@@ -1,0 +1,41 @@
+form {
+  border: 2px solid black;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  max-width: 20rem;
+}
+
+div{
+    /* border: 2px solid blue; */
+    margin: 2px;
+}
+
+input {
+    padding: 5px;
+    border-radius: 5px;
+
+}
+input:focus {
+    outline: none;
+    border: 3px solid blue;
+    border-radius: 5px;
+    box-shadow: inset 2px;
+}
+label{
+    padding-bottom: 4px;
+}
+.flex-row{
+    display: flex;
+    flex-direction: colmun;
+}
+
+.flex-column{
+    display: flex;
+    flex-direction: column;
+}
+
+button[type='submit']:hover{
+    background-color: blue;
+    color: white;
+}

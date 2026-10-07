@@ -1,13 +1,19 @@
 <form novalidate (submit)="submitForm($event)">
-  <label for="nombre">Nombre:</label>
-  <input id="nombre" type="text" [formField]="usuarioForm.nombre" />
-  <br />
-  <label for="apellido">Apellido:</label>
-  <input id="apellido" type="text" [formField]="usuarioForm.apellido" />
-  <br />
-  <label for="username">Username:</label>
-  <input id="username" type="text" [formField]="usuarioForm.username" />
-  <br />
+  <div class = 'flex-column'>
+    <label for="nombre">Nombre:</label>
+    <input id="nombre" type="text" [formField]="usuarioForm.nombre" />
+  </div>
+  <!-- <br /> -->
+  <div class = 'flex-column'>
+    <label for="apellido">Apellido:</label>
+    <input id="apellido" type="text" [formField]="usuarioForm.apellido" />
+  </div>
+  <!-- <br /> -->
+  <div class = 'flex-column'>
+    <label for="username">Username:</label>
+    <input id="username" type="text" [formField]="usuarioForm.username" />
+  </div>
+  <!-- <br /> -->
   <button type="submit">Guardar</button>
 </form>
 <p>Valores del formulario:</p>
