@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { routes } from './app.routes';
@@ -12,12 +12,13 @@ import { EditarTareasPage } from './pages/tareas/editar-tareas/editar-tareas.pag
 import { ListarTareasPage } from './pages/tareas/listar-tareas/listar-tareas.page';
 import { ListarUsuariosPage } from './pages/usuarios/listar-usuarios/listar-usuarios.page';
 import { NotFoundPage } from './pages/not-found/not-found.page';
+import { UsuarioService } from './services/usuario.service';
 import { listaUsuarios } from './model/listaUsuarios';
 import { listaTareas } from './model/listaTareas';
 
 describe('Entrega: navegación y comunicación entre componentes', () => {
   beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [provideRouter(routes)] });
+    TestBed.configureTestingModule({ providers: [provideRouter(routes, withComponentInputBinding())] });
   });
 
   afterEach(() => vi.restoreAllMocks());
@@ -25,6 +26,7 @@ describe('Entrega: navegación y comunicación entre componentes', () => {
   it('abre crear usuario y recibe el objeto escrito en el formulario', async () => {
     const harness = await RouterTestingHarness.create();
     const page = await harness.navigateByUrl('/usuarios/create', CrearUsuariosPage);
+    await harness.fixture.whenStable();
     const received = vi.spyOn(page, 'onGuardarUsuario');
     const root = harness.routeNativeElement!;
     for (const [id, value] of [
@@ -38,6 +40,9 @@ describe('Entrega: navegación y comunicación entre componentes', () => {
     expect(received).toHaveBeenCalledWith({
       id_usuario: 0, nombre: 'Ana', apellido: 'Pérez', username: 'ana',
     });
+    await harness.fixture.whenStable();
+    expect(harness.routeNativeElement!.textContent).toContain('Ana');
+    expect((await TestBed.inject(UsuarioService).getAll()).at(-1)?.id_usuario).toBe(2);
   });
 
   it('abre crear tarea y recibe los datos del formulario, incluidos los select', async () => {
@@ -67,6 +72,7 @@ describe('Entrega: navegación y comunicación entre componentes', () => {
     const original = { ...listaUsuarios[0] };
     const harness = await RouterTestingHarness.create();
     const page = await harness.navigateByUrl('/usuarios/1', EditarUsuariosPage);
+    await harness.fixture.whenStable();
     const received = vi.spyOn(page, 'onGuardarUsuario');
     const form = harness.routeDebugElement!.query(By.directive(UsuarioForm)).componentInstance as UsuarioForm;
     expect(form.usuarioModel()).toEqual(listaUsuarios[0]);
@@ -74,6 +80,9 @@ describe('Entrega: navegación y comunicación entre componentes', () => {
     form.submitForm(new Event('submit'));
     expect(received).toHaveBeenCalledWith({ ...listaUsuarios[0], nombre: 'Editado' });
     expect(listaUsuarios[0]).toEqual(original);
+    await harness.fixture.whenStable();
+    expect((await TestBed.inject(UsuarioService).getById(1))?.nombre).toBe('Editado');
+    expect(harness.routeNativeElement!.textContent).toContain('Editado');
   });
 
   it('actualiza el formulario al navegar entre IDs de tarea y conserva los datos originales', async () => {
@@ -94,6 +103,7 @@ describe('Entrega: navegación y comunicación entre componentes', () => {
     const harness = await RouterTestingHarness.create();
     for (const url of ['/usuarios/999', '/usuarios/abc', '/tareas/999', '/tareas/abc']) {
       await harness.navigateByUrl(url);
+      await harness.fixture.whenStable();
       expect(harness.routeNativeElement!.textContent).toContain('No se encontró');
       expect(harness.routeNativeElement!.querySelector('form')).toBeNull();
     }
@@ -103,12 +113,16 @@ describe('Entrega: navegación y comunicación entre componentes', () => {
     const harness = await RouterTestingHarness.create();
     const page = await harness.navigateByUrl('/usuarios', ListarUsuariosPage);
     const remove = vi.spyOn(page, 'eliminarUsuario');
+    await harness.fixture.whenStable();
     const buttons = harness.routeNativeElement!.querySelectorAll('tbody button');
     buttons[1].dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(remove).toHaveBeenCalledWith(listaUsuarios[0]);
     const edit = harness.routeDebugElement!.queryAll(By.css('tbody button'))[0];
     const { RouterLink } = await import('@angular/router');
     expect(edit.injector.get(RouterLink).urlTree?.toString()).toBe('/usuarios/1');
+    await harness.fixture.whenStable();
+    expect(await TestBed.inject(UsuarioService).getAll()).toEqual([]);
+    expect(harness.routeNativeElement!.textContent).toContain('No se encontraron usuarios');
   });
 
   it('conecta acciones de tareas y no permite finalizar una ya cerrada', async () => {
@@ -117,14 +131,14 @@ describe('Entrega: navegación y comunicación entre componentes', () => {
     const finish = vi.spyOn(page, 'finalizarTarea');
     const remove = vi.spyOn(page, 'eliminarTarea');
     const log = vi.spyOn(console, 'log').mockImplementation(() => {});
+    await harness.fixture.whenStable();
     const buttons = harness.routeNativeElement!.querySelectorAll<HTMLButtonElement>('tbody button');
     buttons[1].click();
     buttons[2].click();
     expect(finish).toHaveBeenCalledWith(listaTareas[0]);
     expect(remove).toHaveBeenCalledWith(listaTareas[0]);
     expect(log).toHaveBeenCalledWith(
-      'Finalizar tarea (ejemplo sin persistencia):',
-      { id_tarea: 1, terminada: expect.any(String) },
+      'Finalizar tarea:', listaTareas[0],
     );
     expect(buttons[4].disabled).toBe(true);
     expect(listaTareas[0].terminada).toBeNull();

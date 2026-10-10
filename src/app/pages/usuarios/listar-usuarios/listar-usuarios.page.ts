@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject, resource } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Usuario } from '../../../model/usuario';
-import { listaUsuarios } from '../../../model/listaUsuarios';
+import { UsuarioService } from '../../../services/usuario.service';
 
 @Component({
   imports: [RouterLink],
@@ -10,9 +10,19 @@ import { listaUsuarios } from '../../../model/listaUsuarios';
   templateUrl: './listar-usuarios.page.html',
 })
 export class ListarUsuariosPage {
-  public usuarios: Usuario[] = listaUsuarios;
+  private usuarioService = inject(UsuarioService);
 
-  public eliminarUsuario(usuario: Usuario) {
-    console.log('Eliminar usuario (ejemplo sin persistencia):', usuario);
+  public usuarioResource = resource({
+    defaultValue: [],
+    params: () => ({}),
+    loader: () => this.usuarioService.getAll(),
+  });
+
+  public usuarios = computed(() => this.usuarioResource.value());
+  public totalUsuarios = computed(() => this.usuarios().length);
+
+  public async eliminarUsuario(usuario: Usuario) {
+    await this.usuarioService.remove(usuario.id_usuario);
+    this.usuarioResource.reload();
   }
 }

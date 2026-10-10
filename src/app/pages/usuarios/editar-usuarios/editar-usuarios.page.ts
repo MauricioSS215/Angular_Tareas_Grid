@@ -1,30 +1,35 @@
-import { Component, inject, OnDestroy, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, computed, inject, input, resource } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { Usuario } from '../../../model/usuario';
-import { listaUsuarios } from '../../../model/listaUsuarios';
 import { UsuarioForm } from '../../../components/usuario/usuario.form';
+import { UsuarioService } from '../../../services/usuario.service';
 
 @Component({
   imports: [UsuarioForm, RouterLink],
   selector: 'app-editar-usuarios',
   templateUrl: './editar-usuarios.page.html',
 })
-export class EditarUsuariosPage implements OnDestroy {
-  private route = inject(ActivatedRoute);
-  public usuario = signal<Usuario | undefined>(undefined);
-
-  // Al abrir la página o cambiar el ID, buscamos el registro en la lista.
-  private parametros = this.route.paramMap.subscribe((params) => {
-    const id = Number(params.get('id_usuario'));
-    const usuarioEncontrado = listaUsuarios.find((item) => item.id_usuario === id);
-    this.usuario.set(usuarioEncontrado);
+export class EditarUsuariosPage {
+  public id_usuario = input.required<number, string>({
+    transform: (value) => Number(value),
   });
 
-  public onGuardarUsuario(usuario: Usuario) {
-    console.log('EditarUsuariosPage recibió:', usuario);
-  }
+  private usuarioService = inject(UsuarioService);
+  private router = inject(Router);
 
-  ngOnDestroy() {
-    this.parametros.unsubscribe();
+  public usuarioResource = resource({
+    params: () => {
+      const id_usuario = this.id_usuario();
+      if (!id_usuario) return undefined;
+      return { id_usuario };
+    },
+    loader: ({ params }) => this.usuarioService.getById(params.id_usuario),
+  });
+
+  public usuario = computed(() => this.usuarioResource.value());
+
+  public async onGuardarUsuario(usuario: Usuario) {
+    await this.usuarioService.update(this.id_usuario(), usuario);
+    await this.router.navigate(['/usuarios']);
   }
 }

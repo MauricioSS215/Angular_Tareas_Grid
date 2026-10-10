@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { Usuario } from '../../../model/usuario';
 import { UsuarioForm } from '../../../components/usuario/usuario.form';
-import { RouterLink } from '@angular/router';
+import { UsuarioService } from '../../../services/usuario.service';
 
 @Component({
   imports: [UsuarioForm, RouterLink],
@@ -10,7 +11,18 @@ import { RouterLink } from '@angular/router';
   templateUrl: './crear-usuarios.page.html',
 })
 export class CrearUsuariosPage {
-  public onGuardarUsuario(usuario: Usuario) {
-    console.log('CrearUsuariosPage recibió:', usuario);
+  private usuarioService = inject(UsuarioService);
+  private router = inject(Router);
+
+  public usuarioVacio: Usuario = {
+    id_usuario: 0,
+    nombre: '',
+    apellido: '',
+    username: '',
+  };
+
+  public async onGuardarUsuario(usuario: Usuario) {
+    await this.usuarioService.add(usuario);
+    await this.router.navigate(['/usuarios']);
   }
 }

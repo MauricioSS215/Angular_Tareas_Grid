@@ -7,7 +7,7 @@
     </tr>
   </thead>
   <tbody>
-    @for (usuario of usuarios; track usuario.id_usuario) {
+    @for (usuario of usuarios(); track usuario.id_usuario) {
       <tr>
         <td>{{ usuario.id_usuario }}</td>
         <td>{{ usuario.nombre }}</td>

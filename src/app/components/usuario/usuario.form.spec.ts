@@ -12,6 +12,9 @@ describe('UsuarioForm', () => {
 
     fixture = TestBed.createComponent(UsuarioForm);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('usuario', {
+      id_usuario: 0, nombre: '', apellido: '', username: '',
+    });
     await fixture.whenStable();
   });
 

@@ -8,7 +8,7 @@
     </tr>
   </thead>
   <tbody>
-    @for (tarea of tareas; track tarea.id_tarea) {
+    @for (tarea of this.tareaResource.value(); track tarea.id_tarea) {
       <tr>
         <td>{{ tarea.id_tarea }}</td>
         <td>{{ tarea.id_creador }}</td>

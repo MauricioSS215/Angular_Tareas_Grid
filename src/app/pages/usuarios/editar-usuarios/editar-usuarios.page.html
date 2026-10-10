@@ -1,7 +1,11 @@
 <h2>Editar usuario</h2>
-@if (usuario(); as actual) {
-  <p>ID: {{ actual.id_usuario }}</p>
-  <app-usuario-form [usuarioInicial]="actual" (guardarUsuario)="onGuardarUsuario($event)" />
+@if (usuarioResource.isLoading()) {
+  <p>Cargando usuario...</p>
+} @else if (usuarioResource.error()) {
+  <p>No se pudo cargar el usuario.</p>
+} @else if (usuario(); as actual) {
+  <p>ID: {{ id_usuario() }}</p>
+  <app-usuario-form [usuario]="actual" (guardarUsuario)="onGuardarUsuario($event)" />
 } @else {
   <p>No se encontró el usuario solicitado.</p>
 }

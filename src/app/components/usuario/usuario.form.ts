@@ -1,4 +1,4 @@
-import { Component, Input, output, signal } from '@angular/core';
+import { Component, input, linkedSignal, output } from '@angular/core';
 import { form, FormField } from '@angular/forms/signals';
 import { JsonPipe } from '@angular/common';
 import { Usuario } from '../../model/usuario';
@@ -10,21 +10,10 @@ import { Usuario } from '../../model/usuario';
   templateUrl: './usuario.form.html',
 })
 export class UsuarioForm {
-  public usuarioModel = signal<Usuario>({
-    id_usuario: 0,
-    nombre: '',
-    apellido: '',
-    username: '',
-  });
-
+  public usuario = input.required<Usuario>();
+  public usuarioModel = linkedSignal<Usuario>(() => ({ ...this.usuario() }));
   public usuarioForm = form(this.usuarioModel);
   public guardarUsuario = output<Usuario>();
-
-  // En edición, la página envía los datos que debe mostrar el formulario.
-  @Input()
-  set usuarioInicial(usuario: Usuario) {
-    this.usuarioModel.set({ ...usuario });
-  }
 
   public submitForm(event: Event) {
     event.preventDefault();
