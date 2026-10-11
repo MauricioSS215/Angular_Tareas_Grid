@@ -1,0 +1,51 @@
+### Usar con la extensión REST Client. Ejecutar login y pegar token.
+@baseUrl = http://localhost:3000
+@token = PEGAR_TOKEN
+@idTarea = 1
+
+### Login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{"username":"admin","password":"Contraseña1"}
+
+### Identidad
+GET {{baseUrl}}/auth
+Authorization: Bearer {{token}}
+
+### Listado global
+GET {{baseUrl}}/tareas
+Authorization: Bearer {{token}}
+
+### Detalle
+GET {{baseUrl}}/tareas/{{idTarea}}
+Authorization: Bearer {{token}}
+
+### Crear (admin o superadmin)
+POST {{baseUrl}}/tareas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"grupo":"user","titulo":"Preparar frontend Angular","descripcion":null,"prioridad":"2:alta"}
+
+### Editar (creador o superadmin)
+PATCH {{baseUrl}}/tareas/{{idTarea}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"titulo":"Título actualizado","descripcion":"Detalle actualizado"}
+
+### Finalizar (grupo destinatario exacto)
+PATCH {{baseUrl}}/tareas/{{idTarea}}/finalizacion
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{}
+
+### Borrar (solo creador)
+DELETE {{baseUrl}}/tareas/{{idTarea}}
+Authorization: Bearer {{token}}
+
+### Perfil propio
+GET {{baseUrl}}/usuarios/2
+Authorization: Bearer {{token}}
