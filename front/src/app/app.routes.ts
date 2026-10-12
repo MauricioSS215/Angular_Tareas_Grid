@@ -14,7 +14,7 @@ export const routes: Routes = [
   },
   // La ruta fija debe ir antes de usuarios/:id_usuario.
   {
-    path: 'usuarios/create',
+    path: 'usuarios/crear',
     title: 'Crear usuario',
     loadComponent: () =>
       import('./pages/usuarios/crear-usuarios/crear-usuarios.page').then(

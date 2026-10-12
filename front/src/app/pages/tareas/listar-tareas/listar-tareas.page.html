@@ -1,32 +1,20 @@
 <h2>Tareas</h2>
-<a routerLink="/tareas/create">Crear tarea</a>
-<table>
-  <thead>
-    <tr>
-      <th>ID</th><th>Creador</th><th>Título</th><th>Descripción</th>
-      <th>Grupo</th><th>Prioridad</th><th>Creada</th><th>Terminada</th><th>Estado</th><th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    @for (tarea of this.tareaResource.value(); track tarea.id_tarea) {
-      <tr>
-        <td>{{ tarea.id_tarea }}</td>
-        <td>{{ tarea.id_creador }}</td>
-        <td>{{ tarea.titulo }}</td>
-        <td>{{ tarea.descripcion }}</td>
-        <td>{{ tarea.grupo }}</td>
-        <td>{{ tarea.prioridad }}</td>
-        <td>{{ tarea.creada | date: 'dd/MM/yyyy HH:mm' : 'UTC' }} UTC</td>
-        <td>{{ tarea.terminada ? (tarea.terminada | date: 'dd/MM/yyyy HH:mm' : 'UTC') + ' UTC' : 'Pendiente' }}</td>
-        <td>{{ tarea.estado }}</td>
-        <td>
-          <button type="button" [routerLink]="['/tareas', tarea.id_tarea]">Editar</button>
-          <button type="button" (click)="finalizarTarea(tarea)" [disabled]="tarea.terminada !== null">Finalizar</button>
-          <button type="button" (click)="eliminarTarea(tarea)">Eliminar</button>
-        </td>
-      </tr>
+<a routerLink="/tareas/crear">Crear tarea</a>
+
+@if (tareaResource.isLoading()) {
+  <p>Cargando tareas...</p>
+} @else if (tareaResource.error()) {
+  <p>No se pudieron cargar las tareas.</p>
+} @else {
+  <div class="lista-tareas">
+    @for (tarea of tareaResource.value(); track tarea.id_tarea) {
+      <app-tarea-card
+        [tarea]="tarea"
+        (editarTarea)="editarTarea($event)"
+        (eliminarTarea)="eliminarTarea($event)"
+      />
     } @empty {
-      <tr><td colspan="10">No se encontraron tareas registradas.</td></tr>
+      <p>No hay tareas registradas.</p>
     }
-  </tbody>
-</table>
+  </div>
+}

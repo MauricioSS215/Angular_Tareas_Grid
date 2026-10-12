@@ -1,39 +1,30 @@
 import { Component, resource, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { DatePipe } from '@angular/common';
-import { Tarea } from '../../../model/tarea';
-import { listaTareas } from '../../../model/listaTareas';
+import { Router, RouterLink } from '@angular/router';
+import { TareaCard } from '../../../components/tarea/tarea.card';
 import { TareasService } from '../../../services/tareas.service';
-import { Router } from '@angular/router';
 
 @Component({
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink, TareaCard],
   selector: 'app-listar-tareas',
   styleUrl: './listar-tareas.page.css',
   templateUrl: './listar-tareas.page.html',
 })
 export class ListarTareasPage {
   private router = inject(Router);
-  public tareasService = inject(TareasService);
+  private tareasService = inject(TareasService);
 
-  public tareaResource = resource(
-    {
-      defaultValue: [],
-      params: () => {
-        return {};
-      },
-      loader: async () => {
-        return this.tareasService.obtenerTareas();
-      },
-    }
-  );
-  
-  public finalizarTarea(tarea: Tarea) {
-    console.log('Finalizar tarea:', tarea);
+  public tareaResource = resource({
+    defaultValue: [],
+    params: () => ({}),
+    loader: () => this.tareasService.obtenerTareas(),
+  });
+
+  public editarTarea(id_tarea: number) {
+    this.router.navigate(['/tareas', id_tarea]);
   }
 
-
-  public eliminarTarea(tarea: Tarea) {
-    console.log('Eliminar tarea (ejemplo sin persistencia):', tarea);
+  public async eliminarTarea(id_tarea: number) {
+    await this.tareasService.remove(id_tarea);
+    this.tareaResource.reload();
   }
 }

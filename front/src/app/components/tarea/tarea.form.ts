@@ -9,7 +9,7 @@ import { Tarea } from '../../model/tarea';
   templateUrl: './tarea.form.html',
 })
 export class TareaForm {
-  public tareaModel = signal<Tarea>({
+  public tareaModel = signal<Tarea & { descripcion: string }>({
     id_tarea: 0,
     id_creador: 1,
     grupo: 'user',
@@ -27,7 +27,10 @@ export class TareaForm {
   // En edición, la página envía los datos que debe mostrar el formulario.
   @Input()
   set tareaInicial(tarea: Tarea) {
-    this.tareaModel.set({ ...tarea });
+    this.tareaModel.set({
+      ...tarea,
+      descripcion: tarea.descripcion ?? '',
+    });
   }
 
   public submitForm(event: Event) {

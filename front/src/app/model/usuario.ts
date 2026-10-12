@@ -1,7 +1,12 @@
-// Se conserva el modelo simplificado trabajado en clase.
+export type Grupo = 'user' | 'admin' | 'superadmin';
+
 export type Usuario = {
   id_usuario: number;
-  nombre: string;
-  apellido: string;
   username: string;
+  nombres: string;
+  apellidos: string;
+  fecha_nacimiento: string;
+  nombre_completo: string;
+  grupos: Grupo[];
+  activo: boolean;
 };

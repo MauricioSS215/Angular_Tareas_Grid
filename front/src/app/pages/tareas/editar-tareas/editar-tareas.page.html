@@ -1,8 +1,18 @@
 <h2>Editar tarea</h2>
-@if (tarea(); as actual) {
+
+@if (tareaResource.isLoading()) {
+  <p>Cargando tarea...</p>
+} @else if (tareaResource.error()) {
+  <p>No se pudo cargar la tarea.</p>
+} @else if (tarea(); as actual) {
   <p>ID: {{ actual.id_tarea }}</p>
-  <app-tarea-form [tareaInicial]="actual" (guardarTarea)="onGuardarTarea($event)" />
+<app-tarea-card
+  [tarea]="actual"
+  [editable]="true"
+  (guardarTarea)="onGuardarTarea($event)"
+/>
 } @else {
   <p>No se encontró la tarea solicitada.</p>
 }
+
 <a routerLink="/tareas">Volver a tareas</a>

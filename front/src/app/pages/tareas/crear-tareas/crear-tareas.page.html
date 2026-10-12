@@ -1,3 +1,9 @@
 <h2>Crear tarea</h2>
-<app-tarea-form (guardarTarea)="onGuardarTarea($event)" />
+
+<app-tarea-card
+  [tarea]="tareaVacia"
+  [editable]="true"
+  (guardarTarea)="onGuardarTarea($event)"
+/>
+
 <a routerLink="/tareas">Volver a tareas</a>

@@ -14,12 +14,16 @@ export class CrearUsuariosPage {
   private usuarioService = inject(UsuarioService);
   private router = inject(Router);
 
-  public usuarioVacio: Usuario = {
-    id_usuario: 0,
-    nombre: '',
-    apellido: '',
-    username: '',
-  };
+public usuarioVacio: Usuario = {
+  id_usuario: 0,
+  username: '',
+  nombres: '',
+  apellidos: '',
+  fecha_nacimiento: '',
+  nombre_completo: '',
+  grupos: ['user'],
+  activo: true,
+};
 
   public async onGuardarUsuario(usuario: Usuario) {
     await this.usuarioService.add(usuario);

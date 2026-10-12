@@ -1,0 +1,43 @@
+:host {
+  display: block;
+  width: 300px;
+  max-width: 100%;
+}
+
+article {
+  height: 100%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f8f9fa;
+}
+
+h3 {
+  margin: -20px -20px 15px;
+  padding: 12px 20px;
+  background-color: #203858;
+  color: white;
+  border-radius: 10px 10px 0 0;
+}
+
+p {
+  overflow-wrap: anywhere;
+}
+
+button {
+  padding: 8px 14px;
+  margin: 3px;
+  border: none;
+  border-radius: 5px;
+  background-color: #2457a7;
+  color: white;
+  cursor: pointer;
+}
+
+button:last-child {
+  background-color: #b83232;
+}
+
+button:hover {
+  opacity: 0.8;
+}

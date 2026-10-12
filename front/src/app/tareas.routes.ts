@@ -12,7 +12,7 @@ export const tareasRoutes: Routes = [
   },
   // "create" debe ir antes del parámetro para que no se interprete como un ID.
   {
-    path: 'create',
+    path: 'crear',
     title: 'Crear tarea',
     loadComponent: () =>
       import('./pages/tareas/crear-tareas/crear-tareas.page').then(

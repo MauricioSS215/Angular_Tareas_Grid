@@ -6,7 +6,7 @@ export type Tarea = {
   id_creador: number;
   grupo: Grupo;
   titulo: string;
-  descripcion: string;
+  descripcion: string | null;
   prioridad: Prioridad;
   creada: string;
   terminada: string | null;

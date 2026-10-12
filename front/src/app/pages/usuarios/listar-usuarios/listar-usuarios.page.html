@@ -1,25 +1,42 @@
 <h2>Usuarios</h2>
-<a routerLink="/usuarios/create">Crear usuario</a>
+<a routerLink="/usuarios/crear">Crear usuario</a>
+
 <table>
   <thead>
     <tr>
-      <th>ID</th><th>Nombre</th><th>Apellido</th><th>Username</th><th>Acciones</th>
+      <th>ID</th>
+      <th>Username</th>
+      <th>Nombres</th>
+      <th>Apellidos</th>
+      <th>Nombre completo</th>
+      <th>Fecha de nacimiento</th>
+      <th>Grupos</th>
+      <th>Activo</th>
+      <th>Acciones</th>
     </tr>
   </thead>
+
   <tbody>
     @for (usuario of usuarios(); track usuario.id_usuario) {
       <tr>
         <td>{{ usuario.id_usuario }}</td>
-        <td>{{ usuario.nombre }}</td>
-        <td>{{ usuario.apellido }}</td>
         <td>{{ usuario.username }}</td>
+        <td>{{ usuario.nombres }}</td>
+        <td>{{ usuario.apellidos }}</td>
+        <td>{{ usuario.nombre_completo }}</td>
+        <td>{{ usuario.fecha_nacimiento }}</td>
+        <td>{{ usuario.grupos.join(', ') }}</td>
+        <td>{{ usuario.activo ? 'Sí' : 'No' }}</td>
         <td>
           <button type="button" [routerLink]="['/usuarios', usuario.id_usuario]">Editar</button>
+
           <button type="button" (click)="eliminarUsuario(usuario)">Eliminar</button>
         </td>
       </tr>
     } @empty {
-      <tr><td colspan="5">No se encontraron usuarios registrados.</td></tr>
+      <tr>
+        <td colspan="9">No se encontraron usuarios registrados.</td>
+      </tr>
     }
   </tbody>
 </table>

@@ -1,30 +1,37 @@
-import { Component, inject, OnDestroy, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, computed, inject, input, resource } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { Tarea } from '../../../model/tarea';
-import { listaTareas } from '../../../model/listaTareas';
-import { TareaForm } from '../../../components/tarea/tarea.form';
+import { TareasService } from '../../../services/tareas.service';
+import { TareaCard } from '../../../components/tarea/tarea.card';
 
 @Component({
-  imports: [TareaForm, RouterLink],
+  imports: [TareaCard, RouterLink],
   selector: 'app-editar-tareas',
   templateUrl: './editar-tareas.page.html',
 })
-export class EditarTareasPage implements OnDestroy {
-  private route = inject(ActivatedRoute);
-  public tarea = signal<Tarea | undefined>(undefined);
-
-  // Al abrir la página o cambiar el ID, buscamos el registro en la lista.
-  private parametros = this.route.paramMap.subscribe((params) => {
-    const id = Number(params.get('id_tarea'));
-    const tareaEncontrada = listaTareas.find((item) => item.id_tarea === id);
-    this.tarea.set(tareaEncontrada);
+export class EditarTareasPage {
+  public id_tarea = input.required<number, string>({
+    transform: value => Number(value),
   });
 
-  public onGuardarTarea(tarea: Tarea) {
-    console.log('EditarTareasPage recibió:', tarea);
-  }
+  private tareasService = inject(TareasService);
+  private router = inject(Router);
 
-  ngOnDestroy() {
-    this.parametros.unsubscribe();
+  public tareaResource = resource({
+    params: () => {
+      const id_tarea = this.id_tarea();
+      if (!id_tarea) return undefined;
+      return { id_tarea };
+    },
+    loader: ({ params }) => {
+      return this.tareasService.getById(params.id_tarea);
+    },
+  });
+
+  public tarea = computed(() => this.tareaResource.value());
+
+  public async onGuardarTarea(tarea: Tarea) {
+    await this.tareasService.update(this.id_tarea(), tarea);
+    await this.router.navigate(['/tareas']);
   }
 }

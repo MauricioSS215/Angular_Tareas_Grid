@@ -1,20 +1,48 @@
 <form novalidate (submit)="submitForm($event)">
-  <div class = 'flex-column'>
+  <div class="flex-column">
     <label for="nombre">Nombre:</label>
-    <input id="nombre" type="text" [formField]="usuarioForm.nombre" />
+    <input id="nombre" type="text" [formField]="usuarioForm.nombres" />
   </div>
   <!-- <br /> -->
-  <div class = 'flex-column'>
+  <div class="flex-column">
     <label for="apellido">Apellido:</label>
-    <input id="apellido" type="text" [formField]="usuarioForm.apellido" />
+    <input id="apellido" type="text" [formField]="usuarioForm.apellidos" />
   </div>
   <!-- <br /> -->
-  <div class = 'flex-column'>
+  <div class="flex-column">
     <label for="username">Username:</label>
     <input id="username" type="text" [formField]="usuarioForm.username" />
   </div>
   <!-- <br /> -->
-  <button type="submit">Guardar</button>
+  <div class="flex-column">
+    <label for="fecha_nacimiento">Fecha de nacimiento:</label>
+    <input id="fecha_nacimiento" type="date" [formField]="usuarioForm.fecha_nacimiento" />
+  </div>
+
+  <fieldset>
+    <legend>Grupos:</legend>
+
+    @for (grupo of grupos; track grupo) {
+      <label>
+        <input
+          type="checkbox"
+          [checked]="usuarioModel().grupos.includes(grupo)"
+          (change)="onGrupoToggle(grupo, $event)"
+        />
+        {{ grupo }}
+      </label>
+    }
+  </fieldset>
+
+  <label>
+    <input type="checkbox" [formField]="usuarioForm.activo" />
+    Usuario activo
+  </label>
+
+  @if (usuarioModel().grupos.length === 0) {
+    <p>Seleccioná al menos un grupo.</p>
+  }
+  <button type="submit" [disabled]="usuarioModel().grupos.length === 0">Guardar</button>
 </form>
 <p>Valores del formulario:</p>
 <pre>{{ usuarioForm().value() | json }}</pre>

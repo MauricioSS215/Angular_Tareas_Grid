@@ -1,0 +1,22 @@
+@if (editable()) {
+  <app-tarea-form [tareaInicial]="tarea()" (guardarTarea)="guardarTarea.emit($event)" />
+} @else {
+  <article>
+    <h3>{{ tarea().titulo }}</h3>
+    <p>{{ tarea().descripcion }}</p>
+
+    <p>Grupo: {{ tarea().grupo }}</p>
+    <p>Prioridad: {{ tarea().prioridad }}</p>
+    <p>Estado: {{ tarea().estado }}</p>
+    <p>Creador: {{ tarea().id_creador }}</p>
+    <p>Creada: {{ tarea().creada | date: 'dd/MM/yyyy HH:mm' }}</p>
+    <p>
+      Terminada:
+      {{ tarea().terminada ? (tarea().terminada | date: 'dd/MM/yyyy HH:mm') : 'Pendiente' }}
+    </p>
+
+    <button type="button" (click)="editarTarea.emit(tarea().id_tarea)">Editar</button>
+
+    <button type="button" (click)="eliminarTarea.emit(tarea().id_tarea)">Eliminar</button>
+  </article>
+}

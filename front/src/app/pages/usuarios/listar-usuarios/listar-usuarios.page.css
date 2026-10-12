@@ -1,6 +1,45 @@
-form {
-  border: 2px solid black;
+:host {
+  display: block;
+  max-width: 100%;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th,
+td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #203858;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+button {
+  padding: 8px 14px;
+  margin: 3px;
+  border: none;
   border-radius: 5px;
-  display: flex;
-  flex-direction: column;
+  background-color: #2457a7;
+  color: white;
+  cursor: pointer;
+}
+
+button:last-child {
+  background-color: #b83232;
+}
+
+button:hover {
+  opacity: 0.8;
 }
