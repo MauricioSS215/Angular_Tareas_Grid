@@ -1,4 +1,6 @@
-# Contrato para el próximo frontend Angular
+# Peticiones y respuestas de la API
+
+Referencia para probar la API. El frontend de la Tarea 2 usa datos en memoria y no se conecta a estas rutas.
 
 URL base local: `http://localhost:3000`.
 
@@ -22,7 +24,7 @@ Respuesta 200:
 
 `GET /auth` permite recuperar la identidad actual después de iniciar sesión.
 La respuesta contiene `id_usuario`, `username` y `grupos`.
-Ante 401, el frontend debe solicitar un nuevo inicio de sesión.
+Ante 401, se necesita un token válido para continuar.
 
 ## Tipos de datos
 
@@ -84,24 +86,7 @@ Para usar la hora actual, enviar un objeto vacío `{}`.
 Una tarea ya cerrada responde 409.
 No enviar `estado`, `creada`, `id_creador`, `id_tarea` ni `terminada` en la edición general.
 
-## Visibilidad de acciones en la interfaz
-
-```typescript
-const puedeCrear = identidad.grupos.some(g => g === 'admin' || g === 'superadmin');
-const puedeEditar = tarea.id_creador === identidad.id_usuario
-  || identidad.grupos.includes('superadmin');
-const puedeFinalizar = tarea.terminada === null
-  && identidad.grupos.includes(tarea.grupo);
-const puedeEliminar = tarea.id_creador === identidad.id_usuario;
-```
-
-Estas condiciones permiten mostrar las acciones correspondientes.
-El backend vuelve a verificar cada permiso: la interfaz no sustituye la autorización.
-
-Los usuarios con superadmin no heredan otros grupos.
-Un usuario puede tener varios grupos.
-
-## Usuarios (extra disponible)
+## Usuarios
 
 `GET /usuarios` requiere admin o superadmin.
 `GET /usuarios/:id_usuario` permite el perfil propio o una consulta administrativa.

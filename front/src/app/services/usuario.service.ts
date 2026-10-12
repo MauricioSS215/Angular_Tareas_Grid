@@ -1,10 +1,11 @@
-import { Service } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { Usuario } from '../model/usuario';
 import { listaUsuarios } from '../model/listaUsuarios';
+import { TareasService } from './tareas.service';
 
 @Service()
 export class UsuarioService {
-  // Datos locales hasta completar la API del parcial.
+  private tareasService = inject(TareasService);
   private usuarios: Usuario[] = listaUsuarios.map((usuario) => ({ ...usuario }));
 
   public async getAll(): Promise<Usuario[]> {
@@ -37,6 +38,10 @@ export class UsuarioService {
   }
 
   public async remove(id_usuario: number): Promise<void> {
+    const tareas = await this.tareasService.getAll();
+    if (tareas.some(tarea => tarea.id_creador === id_usuario)) {
+      throw new Error('El usuario tiene tareas asociadas. Eliminá sus tareas antes de borrar el usuario.');
+    }
     this.usuarios = this.usuarios.filter((usuario) => usuario.id_usuario !== id_usuario);
   }
 }

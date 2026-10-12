@@ -1,5 +1,9 @@
 <h2>Crear tarea</h2>
 
+@if (errorGuardar()) {
+  <p role="alert">{{ errorGuardar() }}</p>
+}
+
 <app-tarea-card
   [tarea]="tareaVacia"
   [editable]="true"

@@ -16,7 +16,7 @@ export class ListarTareasPage {
   public tareaResource = resource({
     defaultValue: [],
     params: () => ({}),
-    loader: () => this.tareasService.obtenerTareas(),
+    loader: () => this.tareasService.getAll(),
   });
 
   public editarTarea(id_tarea: number) {

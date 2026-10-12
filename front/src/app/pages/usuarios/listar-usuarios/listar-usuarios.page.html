@@ -1,5 +1,9 @@
-<h2>Usuarios</h2>
+<h2>Usuarios ({{ totalUsuarios() }})</h2>
 <a routerLink="/usuarios/crear">Crear usuario</a>
+
+@if (errorEliminar()) {
+  <p role="alert">{{ errorEliminar() }}</p>
+}
 
 <table>
   <thead>

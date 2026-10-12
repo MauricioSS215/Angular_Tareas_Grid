@@ -2,7 +2,6 @@ import { Type, type FastifyPluginAsyncTypebox } from "@fastify/type-provider-typ
 import { UsuarioSchema, UsuarioParamsSchema, CrearUsuarioSchema, ActualizarUsuarioSchema } from "../../schemas/usuarios-schema.ts";
 import { RespuestasError, SeguridadBearer, SinContenidoSchema } from "../../schemas/shared.ts";
 
-// Extra: políticas de usuarios documentadas; los permisos de tareas son independientes.
 const usuariosRoutes: FastifyPluginAsyncTypebox = async fastify => {
   fastify.addHook("onRequest", fastify.authenticate);
 

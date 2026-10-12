@@ -1,4 +1,4 @@
-export type Grupo = 'user' | 'admin' | 'superadmin';
+import { Grupo } from './usuario';
 export type Prioridad = '0:baja' | '1:media' | '2:alta';
 
 export type Tarea = {

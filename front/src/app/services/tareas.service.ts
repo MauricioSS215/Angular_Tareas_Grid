@@ -6,7 +6,7 @@ import { listaTareas } from '../model/listaTareas';
 export class TareasService {
   private tareas: Tarea[] = listaTareas.map(tarea => ({ ...tarea }));
 
-  public async obtenerTareas(): Promise<Tarea[]> {
+  public async getAll(): Promise<Tarea[]> {
     return [...this.tareas];
   }
 

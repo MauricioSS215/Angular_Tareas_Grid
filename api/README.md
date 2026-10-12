@@ -1,185 +1,71 @@
-# Parcial 1 API REST 2026 — Gestión de tareas
+# API de usuarios y tareas
 
-Backend de Desarrollo Web 2026 con Fastify, TypeScript, TypeBox y PostgreSQL.
-Implementa el dominio y las cinco reglas de tareas de la letra incluida en
-`../DatosParcial2026`. Usa `grupos`, como el SQL y los archivos del profesor.
+API del parcial 2026 usada en la Tarea Angular 2. Utiliza Fastify, TypeScript,
+TypeBox y PostgreSQL. El frontend de esta entrega funciona por separado.
 
-## Ejecutar en Windows
+## Ejecutar
 
-Requiere **Node.js 24 o superior** y PostgreSQL con la extensión `pgcrypto`.
-
+Requiere Node.js 24 o superior y Docker Desktop.
 Desde esta carpeta:
 
-```powershell
-npm install
+1. Copiar `.env.example` a `.env`.
+2. Completar `PGPASSWORD` y `FASTIFY_SECRET` y revisar la conexión PostgreSQL.
+3. Instalar dependencias e iniciar la base y el servidor:
+
+```bash
+docker compose up -d db
 npm run dev
 ```
 
-La configuración se carga desde `.env`. Si no existe:
+Si el puerto 5432 está ocupado, cambiar `PGPORT` en `.env`. En mi entorno uso 5434.
+El contenedor y la API toman el mismo puerto de ese archivo.
 
-```powershell
-Copy-Item .env.example .env
-```
+El SQL está en `db/Parcial2026Tareas.sql` y se ejecuta al inicializar la base del contenedor.
+No volver a ejecutar los INSERT sobre una base que ya tiene los datos cargados.
+Los archivos de referencia están en `../Archivos_TareaAngular2`.
 
-Completar la conexión `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`
-y un `FASTIFY_SECRET` propio. `.env` está excluido de Git.
+Swagger: http://localhost:3000/docs.
 
-Para una **base nueva y vacía**, ejecutar en pgAdmin/DBeaver
-`db/Parcial2026Tareas.sql`, proporcionado por el profesor.
-Los INSERT de ejemplo son para la carga inicial: no volver a ejecutarlos en una base ya cargada.
-El backend no reinicializa ni cambia la estructura de la base al arrancar.
+## Autenticación
 
-API: **http://localhost:3000**. Swagger: **http://localhost:3000/docs**.
-OpenAPI JSON: **http://localhost:3000/docs/json**.
+Usar `POST /auth/login`. Las cuentas del SQL `superadmin`, `admin` y `user`
+tienen la contraseña de prueba `Contraseña1`.
+Copiar el token de la respuesta y pegarlo en Authorize en Swagger.
+`GET /auth` devuelve el identificador, username y grupos del usuario autenticado.
 
-En la instalación local existente, se conserva `.env` y la base ya cargada.
+## Rutas
 
-## Inicio de sesión y pruebas desde Swagger
-
-Las cuentas de ejemplo del SQL usan la contraseña **Contraseña1**:
-
-| Username | Grupos |
-|---|---|
-| superadmin | superadmin |
-| admin | admin, user |
-| user | user |
-| mgonzalez | user |
-| srodriguez | user |
-| lfernandez | user |
-
-1. Ejecutar `POST /auth/login` con `username` y `password`.
-2. Copiar el campo `token` de la respuesta.
-3. En Swagger, pulsar **Authorize** y pegar el token.
-4. Probar las rutas protegidas.
-
-Los tokens duran ocho horas. Solo contienen identificador, username y grupos,
-además de las marcas JWT. En cada petición se comprueba que la cuenta sigue activa
-y se consultan sus grupos actuales. No se publican contraseñas ni hashes.
-
-## Reglas de tareas
-
-| Operación | Permiso |
-|---|---|
-| Consultar lista o detalle | Cualquier usuario autenticado |
-| Crear | admin o superadmin |
-| Editar título, descripción, grupo o prioridad | Creador o superadmin |
-| Finalizar | Pertenecer al grupo destinatario exacto |
-| Eliminar | Exclusivamente el creador |
-
-**superadmin no hereda otros grupos** y no puede borrar tareas ajenas.
-El usuario admin de ejemplo puede cerrar tareas user porque tiene ambos grupos.
-
-La creación toma `id_creador` del usuario autenticado.
-`creada` y `estado` los calcula PostgreSQL. El cierre escribe `terminada`.
-La edición general no acepta creador, estado ni fechas.
-No hay reapertura: un segundo cierre devuelve **409 Conflict**.
-
-## API
-
-| Método | Recurso | Resultado |
+| Método | Ruta | Operación |
 |---|---|---|
-| POST | /auth/login | 200: token |
-| GET | /auth | 200: identidad y grupos actuales |
-| GET | /tareas | 200: arreglo global |
-| GET | /tareas/:id_tarea | 200: tarea |
-| POST | /tareas | 201: tarea y cabecera Location |
-| PATCH | /tareas/:id_tarea | 200: tarea actualizada |
-| PATCH | /tareas/:id_tarea/finalizacion | 200: tarea cerrada |
-| DELETE | /tareas/:id_tarea | 204: sin cuerpo |
-| GET | /usuarios | 200: usuarios; admin o superadmin |
-| GET | /usuarios/:id_usuario | 200: perfil propio o consulta administrativa |
-| POST | /usuarios | 201: usuario; solo superadmin |
-| PATCH | /usuarios/:id_usuario | 200: perfil actualizado |
-| DELETE | /usuarios/:id_usuario | 204; solo superadmin |
+| POST | /auth/login | Iniciar sesión |
+| GET | /auth | Consultar identidad |
+| GET, POST | /usuarios | Listar y crear usuarios |
+| GET, PATCH, DELETE | /usuarios/:id_usuario | Consultar, editar y eliminar usuario |
+| GET, POST | /tareas | Listar y crear tareas |
+| GET, PATCH, DELETE | /tareas/:id_tarea | Consultar, editar y eliminar tarea |
+| PATCH | /tareas/:id_tarea/finalizacion | Finalizar tarea |
 
-Las rutas de colección también admiten barra final.
+## Permisos
 
-**Extra de usuarios:** cada usuario puede editar sus datos personales.
-Solo superadmin puede editar otras cuentas, cambiar grupos/activo o dar de alta/baja usuarios.
-La baja devuelve 409 si el usuario todavía tiene tareas propias: esto impide saltarse
-el permiso de eliminación de tareas a través del ON DELETE CASCADE del SQL.
-Las credenciales se crean junto con el usuario en una transacción sobre la misma conexión.
+Cualquier usuario autenticado puede consultar tareas. Admin y superadmin pueden crearlas.
+Solo el creador o superadmin puede editarlas. Para finalizar una tarea hay que pertenecer
+al grupo destinatario. Solo el creador puede eliminarla.
 
-## Autenticación y autorización
+Admin y superadmin pueden listar usuarios. Cada usuario puede consultar y editar sus datos
+personales. Superadmin puede crear y eliminar usuarios, editar otros perfiles y cambiar
+grupos o el estado activo. No se puede eliminar un usuario que todavía tenga tareas propias.
 
-`onRequest` ejecuta `authenticate`: verifica el JWT y carga los grupos actuales
-de la cuenta activa. Luego se validan los schemas y, en `preHandler`, se ejecuta
-el decorador de autorización de cada operación. Los handlers llaman al repositorio
-y construyen la respuesta, sin decidir los permisos.
+PostgreSQL calcula `nombre_completo` y `estado`. Las credenciales se guardan aparte del perfil.
 
-Los decoradores están en `src/plugins/authorization.ts`. Crear tareas usa `isAdmin`,
-editar usa `puedeEditarTarea`, finalizar usa `puedeFinalizarTarea` y borrar usa
-`esCreadorTarea`. Los permisos de usuarios también se resuelven en `preHandler`.
+## Pruebas y comandos
 
-El SQL conserva condiciones de permiso en las modificaciones para protegerlas si
-los datos cambian entre la autorización y la escritura. El cierre repetido es una
-regla de negocio del repositorio y produce 409. Los errores pasan por el manejador central.
+- `npm run dev`: ejecuta TypeScript y reinicia al guardar cambios.
+- `npm run typecheck`: comprueba tipos sin generar JavaScript.
+- `npm test`: comprueba tipos y ejecuta pruebas HTTP con repositorios en memoria.
+- `npm run test:db`: compila y prueba contra PostgreSQL en un esquema temporal.
+- `npm start`: compila a `dist` y ejecuta el servidor compilado.
 
-Ejemplo explicado paso a paso: [docs/RECORRIDO_PETICION.md](docs/RECORRIDO_PETICION.md).
+Los dos últimos comandos generan JavaScript en `dist`.
 
-## Validación y errores
-
-Schemas TypeBox para parámetros, cuerpos y respuestas.
-Los cuerpos JSON mantienen sus tipos: `descripcion: null` no se convierte en cadena vacía.
-Los IDs de URL se convierten a enteros positivos de PostgreSQL.
-Se rechazan campos desconocidos, grupos/prioridades inválidos y cuerpos de edición vacíos.
-
-Los errores comparten esta forma:
-
-```json
-{
-  "statusCode": 403,
-  "error": "Forbidden",
-  "message": "Solo el creador puede eliminar la tarea.",
-  "code": "FORBIDDEN"
-}
-```
-
-400: validación; 401: autenticación; 403: permisos; 404: recurso inexistente;
-409: conflicto o cierre repetido; 500: fallo interno con mensaje público genérico.
-Las restricciones PostgreSQL se traducen en el manejador central.
-
-## Preparado para Angular
-
-Contrato con ejemplos y tipos: [docs/API_ANGULAR.md](docs/API_ANGULAR.md).
-
-CORS permite `http://localhost:4200` y `http://127.0.0.1:4200`,
-incluidos PATCH, DELETE y Authorization. Configurable en `CORS_ORIGINS`.
-El cliente envía `Authorization: Bearer TOKEN`.
-Las fechas de tareas son strings ISO 8601; la fecha de nacimiento es YYYY-MM-DD.
-
-## Comandos y comprobación
-
-```powershell
-npm run typecheck
-npm test
-npm run test:db
-npm start
-```
-
-- `npm test`: tipado y pruebas HTTP de autenticación, permisos, schemas, errores, Swagger y CORS.
-  Usa repositorios de prueba y no necesita PostgreSQL.
-- `npm run test:db`: compilación y pruebas de API/repositorios contra PostgreSQL real.
-  Crea un esquema único `parcial_test_...` con los datos del profesor y lo elimina al terminar.
-  Requiere permiso CREATE sobre la base y pgcrypto ya instalado; no toca las tablas de public.
-  Usa `.env`, o `TEST_DATABASE_URL` si se configura.
-- `npm start`: compila a `dist` y ejecuta el backend compilado.
-- `npm run dev`: ejecuta TypeScript y reinicia ante cambios.
-
-## Estructura
-
-```text
-src/server.ts                   Inicio y cierre del servidor
-src/app.ts                      Autoload y manejo central de errores
-src/plugins/                    JWT, autorización, CORS, Swagger y utilidades Fastify
-src/routes/auth/                Login e identidad
-src/routes/tareas/              Rutas, schemas y operaciones de tareas
-src/routes/usuarios/            Perfiles y administración (extra)
-src/schemas/                    TypeBox y validación
-src/repositories/               Consultas parametrizadas a PostgreSQL
-src/db/database.ts              Pool de conexión
-src/errors/response.errors.ts   Excepciones y traductor PostgreSQL
-test/                           Pruebas HTTP y de integración
-```
-
-Se conserva el SQL del profesor y la organización por capas de los ejemplos de clase.
+Detalles de peticiones y respuestas: [API](docs/API_ANGULAR.md).
+Ejemplo de una petición: [recorrido](docs/RECORRIDO_PETICION.md).

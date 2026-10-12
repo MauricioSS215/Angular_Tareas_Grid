@@ -39,12 +39,5 @@ ajenas: la eliminación corresponde exclusivamente al creador.
 Las condiciones de permiso del UPDATE y DELETE complementan al `preHandler`.
 Evitan una escritura indebida si la tarea cambia entre el chequeo y la consulta SQL.
 
-## Qué se ajustó por el feedback
-
-Se trasladaron los chequeos de permisos a decoradores utilizados desde
-`preHandler`. Se mantuvo la autenticación en `onRequest` y los errores centralizados.
-Las rutas públicas y las reglas de la letra se conservaron. `/tareas` sigue
-siendo una colección global porque cualquier usuario autenticado puede consultarla.
-
-Una consecuencia del orden es que una petición autenticada con datos inválidos
-devuelve 400 antes de evaluar permisos. Sin autenticación, devuelve 401 primero.
+Una petición autenticada con datos inválidos devuelve 400 antes de evaluar permisos.
+Sin autenticación, devuelve 401 primero.

@@ -13,7 +13,7 @@ export default fp(async (fastify) => {
       tags: [
         { name: "auth", description: "Inicio de sesión e identidad actual" },
         { name: "tareas", description: "Gestión global de tareas" },
-        { name: "usuarios", description: "Perfil y administración de usuarios (extra)" },
+        { name: "usuarios", description: "Perfil y administración de usuarios" },
       ],
       components: {
         securitySchemes: {

@@ -10,7 +10,7 @@ export const tareasRoutes: Routes = [
         (m) => m.ListarTareasPage,
       ),
   },
-  // "create" debe ir antes del parámetro para que no se interprete como un ID.
+  // "crear" debe ir antes del parámetro para que no se interprete como un ID.
   {
     path: 'crear',
     title: 'Crear tarea',
@@ -27,7 +27,7 @@ export const tareasRoutes: Routes = [
         (m) => m.EditarTareasPage,
       ),
   },
-  // Conservamos el cierre de las rutas de tareas mostrado en clase.
+  // Las rutas de tareas desconocidas vuelven al listado.
   { path: '**', redirectTo: '' },
 ];
 

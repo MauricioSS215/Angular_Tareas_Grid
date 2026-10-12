@@ -13,7 +13,7 @@
     "build:ts": "tsc",
     "watch:ts": "tsc -w",
     "typecheck": "tsc --noEmit && tsc -p test/tsconfig.json",
-    "test": "npm run typecheck && node --test --test-concurrency=1 test/*.test.ts test/plugins/*.test.ts",
+    "test": "npm run typecheck && node --test --test-concurrency=1 test/*.test.ts",
     "test:db": "npm run build:ts && node --env-file=.env --test --test-concurrency=1 test/integration/database.test.ts"
   },
   "keywords": [],

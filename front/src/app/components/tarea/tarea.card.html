@@ -1,5 +1,5 @@
 @if (editable()) {
-  <app-tarea-form [tareaInicial]="tarea()" (guardarTarea)="guardarTarea.emit($event)" />
+  <app-tarea-form [tarea]="tarea()" (guardarTarea)="guardarTarea.emit($event)" />
 } @else {
   <article>
     <h3>{{ tarea().titulo }}</h3>
