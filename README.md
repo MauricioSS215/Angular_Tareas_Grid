@@ -2,7 +2,7 @@
 
 El repositorio contiene la API del parcial en `api` y el frontend en `front`.
 Funcionan por separado: Angular usa arreglos en los servicios y no consume la API.
-Los archivos originales del profesor están en `Archivos_TareaAngular2`.
+Los archivos que fueron provistos para esta tarea están en `Archivos_TareaAngular2` a modo de respaldo...
 
 ## Dependencias
 
