@@ -25,8 +25,21 @@ public usuarioVacio: Usuario = {
   activo: true,
 };
 
-  public async onGuardarUsuario(usuario: Usuario) {
+  /*public async onGuardarUsuario(usuario: Usuario) {
     await this.usuarioService.add(usuario);
     await this.router.navigate(['/usuarios']);
-  }
+  }*/
+
+  public async onGuardarUsuario(usuario: Usuario) {
+  await this.usuarioService.add({
+    username: usuario.username,
+    nombres: usuario.nombres,
+    apellidos: usuario.apellidos,
+    fecha_nacimiento: usuario.fecha_nacimiento,
+    grupos: usuario.grupos,
+    password: 'Prueba123',
+  });
+
+  await this.router.navigate(['/usuarios']);
+}
 }

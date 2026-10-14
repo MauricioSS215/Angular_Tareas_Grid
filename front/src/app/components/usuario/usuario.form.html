@@ -2,6 +2,33 @@
   <div class="flex-column">
     <label for="nombres">Nombre:</label>
     <input id="nombres" type="text" [formField]="usuarioForm.nombres" />
+
+    Valid username:
+    <strong>{{ usuarioForm.username().valid() }}</strong
+    ><br />
+
+    Invalid username:
+    <strong>{{ usuarioForm.username().invalid() }}</strong
+    ><br />
+
+    Touched username:
+    <strong>{{ usuarioForm.username().touched() }}</strong
+    ><br />
+
+    Errors:
+    <strong>{{ usuarioForm.username().errors() | json }}</strong>
+
+    Valid form:
+    <strong>{{ usuarioForm().valid() }}</strong
+    ><br />
+
+    Invalid form:
+    <strong>{{ usuarioForm().invalid() }}</strong
+    ><br />
+
+    Touched form:
+    <strong>{{ usuarioForm().touched() }}</strong
+    ><br />
   </div>
   <div class="flex-column">
     <label for="apellidos">Apellido:</label>
@@ -10,6 +37,11 @@
   <div class="flex-column">
     <label for="username">Username:</label>
     <input id="username" type="text" [formField]="usuarioForm.username" />
+    @if (usuarioForm.username().touched()) {
+      @for (error of usuarioForm.username().errors(); track $index) {
+        <p class="error">{{ error.message }}</p>
+      }
+    }
   </div>
   <div class="flex-column">
     <label for="fecha_nacimiento">Fecha de nacimiento:</label>

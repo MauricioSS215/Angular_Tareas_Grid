@@ -29,7 +29,14 @@ export class EditarUsuariosPage {
   public usuario = computed(() => this.usuarioResource.value());
 
   public async onGuardarUsuario(usuario: Usuario) {
-    await this.usuarioService.update(this.id_usuario(), usuario);
+    await this.usuarioService.update(this.id_usuario(), {
+      nombres: usuario.nombres,
+      apellidos: usuario.apellidos,
+      fecha_nacimiento: usuario.fecha_nacimiento,
+      grupos: usuario.grupos,
+      activo: usuario.activo,
+    });
+
     await this.router.navigate(['/usuarios']);
   }
 }

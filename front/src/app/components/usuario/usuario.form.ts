@@ -1,5 +1,5 @@
 import { Component, input, linkedSignal, output } from '@angular/core';
-import { form, FormField } from '@angular/forms/signals';
+import { form, FormField, required } from '@angular/forms/signals';
 import { JsonPipe } from '@angular/common';
 import { Grupo, Usuario } from '../../model/usuario';
 @Component({
@@ -14,7 +14,11 @@ export class UsuarioForm {
     ...this.usuario(),
     grupos: [...this.usuario().grupos],
   }));
-  public usuarioForm = form(this.usuarioModel);
+  public usuarioForm = form(this.usuarioModel, (path) => {
+  required(path.username, {
+    message: 'El username es obligatorio',
+  });
+});
   public guardarUsuario = output<Usuario>();
 
   public submitForm(event: Event) {

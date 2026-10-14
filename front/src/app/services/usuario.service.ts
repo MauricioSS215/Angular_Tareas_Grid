@@ -1,22 +1,36 @@
 import { inject, Service } from '@angular/core';
-import { Usuario } from '../model/usuario';
+import { Usuario, CrearUsuarioDTO, ActualizarUsuarioDTO  } from '../model/usuario';
 import { listaUsuarios } from '../model/listaUsuarios';
 import { TareasService } from './tareas.service';
+import { environment } from '../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 
 @Service()
 export class UsuarioService {
+  private baseUrl = environment.apiUrl + '/usuarios';
+  private _httpClient = inject(HttpClient); //instancia de HTTPCLIENT
+
   private tareasService = inject(TareasService);
   private usuarios: Usuario[] = listaUsuarios.map((usuario) => ({ ...usuario }));
 
-  public async getAll(): Promise<Usuario[]> {
+  public async getAll(){
+    return await firstValueFrom(this._httpClient.get<Usuario[]>(this.baseUrl));
+  }
+
+  public async getById(id:number) {
+    return await firstValueFrom(this._httpClient.get<Usuario>(`${this.baseUrl}/${id}`))
+  }
+
+ /* public async getAll(): Promise<Usuario[]> {
     return [...this.usuarios];
   }
 
   public async getById(id_usuario: number): Promise<Usuario | undefined> {
     return this.usuarios.find((usuario) => usuario.id_usuario === id_usuario);
-  }
+  }*/
 
-  public async add(usuario: Usuario): Promise<void> {
+  /*public async add(usuario: Usuario): Promise<void> {
     const id_usuario = Math.max(0, ...this.usuarios.map((item) => item.id_usuario)) + 1;
     this.usuarios.push({
       ...usuario,
@@ -24,9 +38,15 @@ export class UsuarioService {
       grupos: [...usuario.grupos],
       nombre_completo: `${usuario.nombres} ${usuario.apellidos}`,
     });
+  }*/
+
+  public async add(datos: CrearUsuarioDTO){
+    return await firstValueFrom(
+      this._httpClient.post<Usuario>(this.baseUrl, datos)
+    );
   }
 
-  public async update(id_usuario: number, usuario: Usuario): Promise<void> {
+  /*public async update(id_usuario: number, usuario: Usuario): Promise<void> {
     const indice = this.usuarios.findIndex((item) => item.id_usuario === id_usuario);
     if (indice === -1) throw new Error('Usuario no encontrado');
     this.usuarios[indice] = {
@@ -35,7 +55,16 @@ export class UsuarioService {
       grupos: [...usuario.grupos],
       nombre_completo: `${usuario.nombres} ${usuario.apellidos}`,
     };
-  }
+  }*/
+
+public async update(id: number, usuarioModificado: ActualizarUsuarioDTO) {
+  return await firstValueFrom(
+    this._httpClient.patch<Usuario>(
+      `${this.baseUrl}/${id}`,
+      usuarioModificado
+    )
+  );
+}
 
   public async remove(id_usuario: number): Promise<void> {
     const tareas = await this.tareasService.getAll();

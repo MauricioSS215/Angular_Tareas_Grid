@@ -10,3 +10,24 @@ export type Usuario = {
   grupos: Grupo[];
   activo: boolean;
 };
+
+export type CrearUsuarioDTO = {
+  username: string;
+  nombres: string;
+  apellidos: string;
+  fecha_nacimiento: string;
+  grupos?: Grupo[];
+  password: string;
+};
+
+export type ActualizarUsuarioDTO = {
+  nombres?: string;
+  apellidos?: string;
+  fecha_nacimiento?: string;
+  grupos?: Grupo[];
+  activo?: boolean;
+};
+
+export type UsuarioFormulario = Usuario & {
+  password: string;
+};
