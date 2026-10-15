@@ -8,7 +8,7 @@ export default fp<AppOptions>(async (fastify, opts) => {
       .split(",").map(origin => origin.trim()).filter(Boolean);
   await fastify.register(cors, {
     origin: origins,
-    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS","HEAD"],
     allowedHeaders: ["Content-Type", "Authorization"],
     exposedHeaders: ["Location"],
   });

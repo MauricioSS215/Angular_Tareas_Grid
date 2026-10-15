@@ -66,11 +66,17 @@ public async update(id: number, usuarioModificado: ActualizarUsuarioDTO) {
   );
 }
 
-  public async remove(id_usuario: number): Promise<void> {
+  /*public async remove(id_usuario: number): Promise<void> {
     const tareas = await this.tareasService.getAll();
     if (tareas.some(tarea => tarea.id_creador === id_usuario)) {
       throw new Error('El usuario tiene tareas asociadas. Eliminá sus tareas antes de borrar el usuario.');
     }
     this.usuarios = this.usuarios.filter((usuario) => usuario.id_usuario !== id_usuario);
-  }
+  }*/
+
+  public async remove(id: number): Promise<void> {
+  await firstValueFrom(
+    this._httpClient.delete<void>(`${this.baseUrl}/${id}`)
+  );
+}
 }

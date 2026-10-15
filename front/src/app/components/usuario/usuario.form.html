@@ -3,6 +3,30 @@
     <label for="nombres">Nombre:</label>
     <input id="nombres" type="text" [formField]="usuarioForm.nombres" />
 
+    @if (usuarioForm.nombres().touched()) {
+      @for (error of usuarioForm.nombres().errors(); track $index) {
+        <p class="error">{{ error.message }}</p>
+      }
+    }
+  </div>
+  <div class="flex-column">
+    <label for="apellidos">Apellido:</label>
+    <input id="apellidos" type="text" [formField]="usuarioForm.apellidos" />
+
+    @if (usuarioForm.apellidos().touched()) {
+      @for (error of usuarioForm.apellidos().errors(); track $index) {
+        <p class="error">{{ error.message }}</p>
+      }
+    }
+  </div>
+  <div class="flex-column">
+    <label for="username">Username:</label>
+    <input id="username" type="text" [formField]="usuarioForm.username" />
+    @if (usuarioForm.username().touched()) {
+      @for (error of usuarioForm.username().errors(); track $index) {
+        <p class="error">{{ error.message }}</p>
+      }
+    }
     Valid username:
     <strong>{{ usuarioForm.username().valid() }}</strong
     ><br />
@@ -31,21 +55,14 @@
     ><br />
   </div>
   <div class="flex-column">
-    <label for="apellidos">Apellido:</label>
-    <input id="apellidos" type="text" [formField]="usuarioForm.apellidos" />
-  </div>
-  <div class="flex-column">
-    <label for="username">Username:</label>
-    <input id="username" type="text" [formField]="usuarioForm.username" />
-    @if (usuarioForm.username().touched()) {
-      @for (error of usuarioForm.username().errors(); track $index) {
+    <label for="fecha_nacimiento">Fecha de nacimiento:</label>
+    <input id="fecha_nacimiento" type="date" [formField]="usuarioForm.fecha_nacimiento" />
+
+    @if (usuarioForm.fecha_nacimiento().touched()) {
+      @for (error of usuarioForm.fecha_nacimiento().errors(); track $index) {
         <p class="error">{{ error.message }}</p>
       }
     }
-  </div>
-  <div class="flex-column">
-    <label for="fecha_nacimiento">Fecha de nacimiento:</label>
-    <input id="fecha_nacimiento" type="date" [formField]="usuarioForm.fecha_nacimiento" />
   </div>
 
   <fieldset>
@@ -63,15 +80,19 @@
     }
   </fieldset>
 
-  <label>
-    <input type="checkbox" [formField]="usuarioForm.activo" />
-    Usuario activo
-  </label>
+  @if (usuario().id_usuario > 0) {
+    <label>
+      <input type="checkbox" [formField]="usuarioForm.activo" />
+      Usuario activo
+    </label>
+  }
 
   @if (usuarioModel().grupos.length === 0) {
     <p>Seleccioná al menos un grupo.</p>
   }
-  <button type="submit" [disabled]="usuarioModel().grupos.length === 0">Guardar</button>
+  <button type="submit" [disabled]="usuarioForm().invalid() || usuarioModel().grupos.length === 0">
+    Guardar
+  </button>
 </form>
 <p>Valores del formulario:</p>
 <pre>{{ usuarioForm().value() | json }}</pre>

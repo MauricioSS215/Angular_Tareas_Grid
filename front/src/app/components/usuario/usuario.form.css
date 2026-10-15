@@ -3,7 +3,9 @@ form {
   border-radius: 5px;
   display: flex;
   flex-direction: column;
-  max-width: 20rem;
+  width: 20rem;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 10px;
   gap: 8px;
 }
