@@ -2,6 +2,11 @@
   <div class="flex-column">
     <label for="titulo">Título:</label>
     <input id="titulo" type="text" [formField]="tareaForm.titulo" />
+    @if (tareaForm.titulo().touched()) {
+      @for (error of tareaForm.titulo().errors(); track $index) {
+        <p class="error">{{ error.message }}</p>
+      }
+    }
   </div>
   <div class="flex-column">
     <label for="descripcion">Descripción:</label>
@@ -23,7 +28,7 @@
       <option value="2:alta">Alta</option>
     </select>
   </div>
-  <button type="submit">Guardar</button>
+  <button type="submit" [disabled]="tareaForm().invalid()">Guardar</button>
 </form>
 <p>Valores del formulario:</p>
 <pre>{{ tareaForm().value() | json }}</pre>

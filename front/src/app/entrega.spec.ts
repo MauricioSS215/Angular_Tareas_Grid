@@ -87,17 +87,23 @@ describe('Entrega: navegación y comunicación entre componentes', () => {
     });
     await harness.fixture.whenStable();
     const tareas = await TestBed.inject(TareasService).getAll();
-    const guardada = tareas.find(tarea => tarea.titulo === 'Preparar entrega');
+    const guardada = tareas.find((tarea) => tarea.titulo === 'Preparar entrega');
     expect(tareas.length).toBe(listaTareas.length + 1);
     expect(guardada).toMatchObject({
-      id_tarea: 3, id_creador: 1, titulo: 'Preparar entrega',
-      descripcion: 'Revisar las rutas', grupo: 'admin', prioridad: '2:alta',
-      terminada: null, estado: 'Abierta',
+      id_tarea: 3,
+      id_creador: 1,
+      titulo: 'Preparar entrega',
+      descripcion: 'Revisar las rutas',
+      grupo: 'admin',
+      prioridad: '2:alta',
+      terminada: null,
+      estado: 'Abierta',
     });
     expect(Number.isFinite(Date.parse(guardada!.creada))).toBe(true);
     expect(harness.routeNativeElement!.querySelector('h2')!.textContent).toBe('Tareas');
-    const tarjeta = Array.from(harness.routeNativeElement!.querySelectorAll('article'))
-      .find(article => article.textContent?.includes('Preparar entrega'));
+    const tarjeta = Array.from(harness.routeNativeElement!.querySelectorAll('article')).find(
+      (article) => article.textContent?.includes('Preparar entrega'),
+    );
     expect(tarjeta?.textContent).toContain('Revisar las rutas');
     expect(tarjeta?.textContent).toContain('admin');
     expect(tarjeta?.textContent).toContain('2:alta');
@@ -139,15 +145,21 @@ describe('Entrega: navegación y comunicación entre componentes', () => {
     expect(received).toHaveBeenCalledWith({ ...listaTareas[1], titulo: 'Editada' });
     expect(listaTareas[1]).toEqual(original);
     await harness.fixture.whenStable();
-    expect(await TestBed.inject(TareasService).getById(2)).toEqual({ ...original, titulo: 'Editada' });
+    expect(await TestBed.inject(TareasService).getById(2)).toEqual({
+      ...original,
+      titulo: 'Editada',
+    });
     expect(harness.routeNativeElement!.querySelector('h2')!.textContent).toBe('Tareas');
-    const titulos = Array.from(harness.routeNativeElement!.querySelectorAll('article h3'))
-      .map(titulo => titulo.textContent);
+    const titulos = Array.from(harness.routeNativeElement!.querySelectorAll('article h3')).map(
+      (titulo) => titulo.textContent,
+    );
     expect(titulos).toContain('Editada');
     expect(titulos).not.toContain(original.titulo);
     await harness.navigateByUrl('/tareas/2', EditarTareasPage);
     await harness.fixture.whenStable();
-    expect(harness.routeNativeElement!.querySelector<HTMLInputElement>('#titulo')!.value).toBe('Editada');
+    expect(harness.routeNativeElement!.querySelector<HTMLInputElement>('#titulo')!.value).toBe(
+      'Editada',
+    );
   });
 
   it('muestra un mensaje y no un formulario cuando el ID no existe o no es numérico', async () => {
@@ -172,8 +184,9 @@ describe('Entrega: navegación y comunicación entre componentes', () => {
     const { RouterLink } = await import('@angular/router');
     expect(edit.injector.get(RouterLink).urlTree?.toString()).toBe('/usuarios/1');
     await harness.fixture.whenStable();
-    expect(harness.routeNativeElement!.querySelector('[role="alert"]')!.textContent)
-      .toContain('El usuario tiene tareas asociadas');
+    expect(harness.routeNativeElement!.querySelector('[role="alert"]')!.textContent).toContain(
+      'El usuario tiene tareas asociadas',
+    );
     expect(await TestBed.inject(UsuarioService).getById(1)).toBeDefined();
     const tareasService = TestBed.inject(TareasService);
     expect((await tareasService.getAll()).length).toBe(listaTareas.length);
@@ -225,18 +238,28 @@ describe('Entrega: navegación y comunicación entre componentes', () => {
     await TestBed.inject(UsuarioService).remove(1);
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl('/tareas/crear', CrearTareasPage);
-    harness.routeNativeElement!.querySelector('form')!.dispatchEvent(new Event('submit', { cancelable: true }));
+    harness
+      .routeNativeElement!.querySelector('form')!
+      .dispatchEvent(new Event('submit', { cancelable: true }));
     await harness.fixture.whenStable();
     expect(await tareas.getAll()).toEqual([]);
-    expect(harness.routeNativeElement!.querySelector('[role="alert"]')!.textContent)
-      .toContain('Creá un usuario antes de agregar tareas');
+    expect(harness.routeNativeElement!.querySelector('[role="alert"]')!.textContent).toContain(
+      'Creá un usuario antes de agregar tareas',
+    );
     expect(harness.routeNativeElement!.querySelector('h2')!.textContent).toBe('Crear tarea');
   });
 
   it('crea tareas con un usuario existente después de eliminar al creador inicial', async () => {
     const tareas = TestBed.inject(TareasService);
     const usuarios = TestBed.inject(UsuarioService);
-    await usuarios.add({ ...listaUsuarios[0], username: 'otro' });
+    await usuarios.add({
+      username: 'otro',
+      nombres: listaUsuarios[0].nombres,
+      apellidos: listaUsuarios[0].apellidos,
+      fecha_nacimiento: listaUsuarios[0].fecha_nacimiento,
+      grupos: listaUsuarios[0].grupos,
+      password: 'Prueba123',
+    });
     for (const tarea of await tareas.getAll()) await tareas.remove(tarea.id_tarea);
     await usuarios.remove(1);
     const harness = await RouterTestingHarness.create();
@@ -244,7 +267,9 @@ describe('Entrega: navegación y comunicación entre componentes', () => {
     const titulo = harness.routeNativeElement!.querySelector<HTMLInputElement>('#titulo')!;
     titulo.value = 'Tarea del nuevo creador';
     titulo.dispatchEvent(new Event('input', { bubbles: true }));
-    harness.routeNativeElement!.querySelector('form')!.dispatchEvent(new Event('submit', { cancelable: true }));
+    harness
+      .routeNativeElement!.querySelector('form')!
+      .dispatchEvent(new Event('submit', { cancelable: true }));
     await harness.fixture.whenStable();
     const guardadas = await tareas.getAll();
     expect(guardadas).toHaveLength(1);

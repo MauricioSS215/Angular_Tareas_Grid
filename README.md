@@ -1,8 +1,18 @@
-# Tarea Angular 2
+# Tarea Viernes 16 — Usuarios y tareas
 
-El repositorio contiene la API del parcial en `api` y el frontend en `front`.
-Funcionan por separado: Angular usa arreglos en los servicios y no consume la API.
-Los archivos que fueron provistos para esta tarea están en `Archivos_TareaAngular2` a modo de respaldo...
+El repositorio contiene la API en `api` y el frontend Angular en `front`.
+
+El frontend consume la API para listar, crear, editar y eliminar
+usuarios y tareas. Los datos se guardan en PostgreSQL.
+
+Los formularios se reutilizan en creación y edición y tienen
+validaciones con Signal Forms.
+
+Esta entrega funciona sin autenticación ni autorización.
+Los usuarios nuevos tienen la contraseña de prueba `Prueba123`.
+Las tareas usan al primer usuario disponible como creador de ejemplo.
+
+Los archivos que paso el profesor siguen ahi en  `Archivos_TareaAngular2`.
 
 ## Dependencias
 
@@ -20,7 +30,8 @@ Desde la carpeta `front`, luego de instalar las dependencias la primera vez y le
 npm run start
 ```
 
-Abrir http://localhost:4200. Los cambios se pierden al recargar la página.
+Abrir http://localhost:4200. La API debe estar ejecutándose en
+http://localhost:3000.
 
 ## API
 
@@ -39,7 +50,3 @@ El SQL de `api/db` se carga al inicializar la base del contenedor.
 
 Swagger: http://localhost:3000/docs.
 
-## Pruebas
-
-En `front`: `npm test -- --watch=false`.
-En `api`: `npm test` (pruebas HTTP sin PostgreSQL).

@@ -11,7 +11,7 @@ import { TareaCard } from '../../../components/tarea/tarea.card';
 })
 export class EditarTareasPage {
   public id_tarea = input.required<number, string>({
-    transform: value => Number(value),
+    transform: (value) => Number(value),
   });
 
   private tareasService = inject(TareasService);
@@ -31,7 +31,13 @@ export class EditarTareasPage {
   public tarea = computed(() => this.tareaResource.value());
 
   public async onGuardarTarea(tarea: Tarea) {
-    await this.tareasService.update(this.id_tarea(), tarea);
+    await this.tareasService.update(this.id_tarea(), {
+      titulo: tarea.titulo,
+      descripcion: tarea.descripcion,
+      grupo: tarea.grupo,
+      prioridad: tarea.prioridad,
+    });
+
     await this.router.navigate(['/tareas']);
   }
 }

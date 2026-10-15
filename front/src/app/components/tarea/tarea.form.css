@@ -17,13 +17,17 @@ label {
   padding-bottom: 4px;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   padding: 5px;
   border-radius: 5px;
   font: inherit;
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
   outline: 2px solid #2457a7;
 }
 
@@ -43,4 +47,9 @@ button[type='submit']:hover {
 button[type='submit']:disabled {
   opacity: 0.5;
   cursor: default;
+}
+
+.error {
+  color: red;
+  margin: 4px 0;
 }

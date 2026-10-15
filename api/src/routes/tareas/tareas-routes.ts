@@ -50,22 +50,27 @@ const tareasRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.post(
     "/",
     {
-      preHandler: [fastify.isAdmin],
       schema: {
         tags: ["tareas"],
         summary: "Crear una tarea",
-        description:
-          "Solo admin o superadmin. El creador se toma de la identidad autenticada.",
-        security: SeguridadBearer,
         body: CrearTareaBodySchema,
         response: { 201: TareaSchema, ...RespuestasError },
       },
     },
     async (request, reply) => {
+      const usuarios = await fastify.usuariosRepo.obtenerTodos();
+
+      if (usuarios.length === 0) {
+        throw fastify.httpErrors.badRequest(
+          "Creá un usuario antes de agregar tareas.",
+        );
+      }
+
       const tarea = await fastify.tareasRepo.crear(
-        request.user.id_usuario,
+        usuarios[0].id_usuario,
         request.body,
       );
+
       return reply
         .code(201)
         .header("Location", `/tareas/${tarea.id_tarea}`)
@@ -114,22 +119,15 @@ const tareasRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.delete(
     "/:id_tarea",
     {
-      preHandler: [fastify.esCreadorTarea],
       schema: {
         tags: ["tareas"],
-        summary: "Eliminar una tarea propia",
-        description:
-          "Exclusivamente el creador. Superadmin no puede borrar tareas ajenas.",
-        security: SeguridadBearer,
+        summary: "Eliminar una tarea",
         params: TareaParamsSchema,
         response: { 204: SinContenidoSchema, ...RespuestasError },
       },
     },
     async (request, reply) => {
-      await fastify.tareasRepo.eliminar(
-        request.params.id_tarea,
-        request.user.id_usuario,
-      );
+      await fastify.tareasRepo.eliminar(request.params.id_tarea);
       return reply.code(204).send(null);
     },
   );

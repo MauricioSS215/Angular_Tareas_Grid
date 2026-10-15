@@ -1,7 +1,5 @@
 import { inject, Service } from '@angular/core';
 import { Usuario, CrearUsuarioDTO, ActualizarUsuarioDTO  } from '../model/usuario';
-import { listaUsuarios } from '../model/listaUsuarios';
-import { TareasService } from './tareas.service';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
@@ -10,9 +8,6 @@ import { firstValueFrom } from 'rxjs';
 export class UsuarioService {
   private baseUrl = environment.apiUrl + '/usuarios';
   private _httpClient = inject(HttpClient); //instancia de HTTPCLIENT
-
-  private tareasService = inject(TareasService);
-  private usuarios: Usuario[] = listaUsuarios.map((usuario) => ({ ...usuario }));
 
   public async getAll(){
     return await firstValueFrom(this._httpClient.get<Usuario[]>(this.baseUrl));

@@ -128,16 +128,14 @@ export class TareasRepository {
     return convertirTarea(result.rows[0]);
   }
 
-  async eliminar(idTarea: number, idCreador: number): Promise<void> {
+  async eliminar(idTarea: number): Promise<void> {
     const result = await this.pool.query(
-      `
-      DELETE FROM tareas WHERE id_tarea = $1 AND id_creador = $2 RETURNING id_tarea
-    `,
-      [idTarea, idCreador],
+      "DELETE FROM tareas WHERE id_tarea = $1 RETURNING id_tarea",
+      [idTarea],
     );
+
     if (!result.rowCount) {
-      await this.obtenerPorId(idTarea);
-      throw new ForbiddenError("Solo el creador puede eliminar la tarea.");
+      throw new NotFoundError("Tarea no encontrada.");
     }
   }
 }

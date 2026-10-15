@@ -12,3 +12,17 @@ export type Tarea = {
   terminada: string | null;
   estado: 'Abierta' | 'Cerrada';
 };
+
+export type ActualizarTareaDTO = {
+  titulo?: string;
+  descripcion?: string | null;
+  grupo?: Grupo;
+  prioridad?: Prioridad;
+};
+
+export type CrearTareaDTO = {
+  titulo: string;
+  grupo: Grupo;
+  descripcion?: string | null;
+  prioridad?: Prioridad;
+};
