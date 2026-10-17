@@ -31,3 +31,9 @@ export type ActualizarUsuarioDTO = {
 export type UsuarioFormulario = Usuario & {
   password: string;
 };
+
+export type UsuarioLogueado = {
+  id_usuario: number;
+  username: string;
+  grupos: Grupo[];
+};

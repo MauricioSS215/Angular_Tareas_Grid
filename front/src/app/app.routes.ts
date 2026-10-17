@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomePage } from './pages/home/home.page';
+import { authenticatedGuard } from './guards/authenticated-guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -31,13 +32,18 @@ export const routes: Routes = [
   },
   {
     path: 'tareas',
+    canActivateChild: [authenticatedGuard],
     loadChildren: () => import('./tareas.routes').then((m) => m.tareasRoutes),
+  },
+  {
+    path: 'login',
+    title: 'Iniciar sesión',
+    loadComponent: () => import('./pages/login/login.page').then((m) => m.LoginPage),
   },
   // El comodín siempre va al final.
   {
     path: '**',
     title: 'No encontrado',
-    loadComponent: () =>
-      import('./pages/not-found/not-found.page').then((m) => m.NotFoundPage),
+    loadComponent: () => import('./pages/not-found/not-found.page').then((m) => m.NotFoundPage),
   },
 ];

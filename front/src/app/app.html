@@ -1,13 +1,19 @@
 <div id="app-layout">
   <header id="app-header">
     <h1>Gestión de usuarios y tareas</h1>
+
+    @if (authService.user(); as usuario) {
+      <small>{{ usuario.username }}</small>
+    }
   </header>
   <div id="app-medio">
     <aside id="app-sidebar">
       <nav aria-label="Menú principal">
         <ul>
+          <li><a routerLink="/home">Home</a></li>
           <li><a routerLink="/usuarios">Listar usuarios</a></li>
           <li><a routerLink="/tareas">Listar tareas</a></li>
+          <li><a routerLink="/login">Iniciar sesión</a></li>
         </ul>
       </nav>
     </aside>

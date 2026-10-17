@@ -1,34 +1,37 @@
-#app-layout{
-  display:flex;
-  flex-direction:column;
-  min-height: 100vh
+#app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-#app-header{
+#app-header {
   background-color: black;
-  color:white
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 15px;
 }
-#app-medio{
-  display:flex;
-  flex:1;
+#app-medio {
+  display: flex;
+  flex: 1;
 }
 
-#app-footer{
-  background-color:cyan;
-
+#app-footer {
+  background-color: cyan;
 }
 
 #app-sidebar {
-  width:240px;
-  background-color:gainsboro ;
+  width: 240px;
+  background-color: gainsboro;
   height: 80vh;
 }
 
-#app-page{
-  flex:1;
-  overflow-y:auto;
-  display:flex;
-  flex-direction:column;
+#app-page {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   /* justify-content:center; */
-  align-items:center;
+  align-items: center;
 }

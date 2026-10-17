@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { AuthService } from './services/auth.service';
 
 @Component({
   imports: [RouterOutlet, RouterLink],
@@ -7,4 +8,6 @@ import { RouterOutlet, RouterLink } from '@angular/router';
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
-export class App {}
+export class App {
+  public readonly authService = inject(AuthService);
+}
