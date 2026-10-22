@@ -1,6 +1,6 @@
 import { Component, computed, inject, resource, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Usuario } from '../../../model/usuario';
+import { Usuario, UsuariosPaginados } from '../../../model/usuario';
 import { UsuarioService } from '../../../services/usuario.service';
 
 @Component({
@@ -12,14 +12,28 @@ import { UsuarioService } from '../../../services/usuario.service';
 export class ListarUsuariosPage {
   private usuarioService = inject(UsuarioService);
 
-  public usuarioResource = resource({
-    defaultValue: [],
-    params: () => ({}),
-    loader: () => this.usuarioService.getAll(),
+  public page = signal(1);
+  public cantidad = signal(5);
+
+  public usuarioResource = resource<UsuariosPaginados, { page: number; cantidad: number }>({
+    defaultValue: {
+      usuarios: [],
+      total: 0,
+      page: 1,
+      cantidad: 10,
+      totalPaginas: 0,
+    },
+    params: () => ({
+      page: this.page(),
+      cantidad: this.cantidad(),
+    }),
+    loader: ({ params }) => this.usuarioService.getAll(params.page, params.cantidad),
   });
 
-  public usuarios = computed(() => this.usuarioResource.value());
-  public totalUsuarios = computed(() => this.usuarios().length);
+  public usuarios = computed(() => this.usuarioResource.value().usuarios);
+  public totalUsuarios = computed(() => this.usuarioResource.value().total);
+  public totalPaginas = computed(() => this.usuarioResource.value().totalPaginas);
+
 
   public errorEliminar = signal('');
 
@@ -29,7 +43,9 @@ export class ListarUsuariosPage {
       await this.usuarioService.remove(usuario.id_usuario);
       this.usuarioResource.reload();
     } catch (error) {
-      this.errorEliminar.set(error instanceof Error ? error.message : 'No se pudo eliminar el usuario.');
+      this.errorEliminar.set(
+        error instanceof Error ? error.message : 'No se pudo eliminar el usuario.',
+      );
     }
   }
 }

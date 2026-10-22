@@ -37,3 +37,11 @@ export type UsuarioLogueado = {
   username: string;
   grupos: Grupo[];
 };
+
+export type UsuariosPaginados = {
+  usuarios: Usuario[];
+  total: number;
+  page: number;
+  cantidad: number;
+  totalPaginas: number;
+};

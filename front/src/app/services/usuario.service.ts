@@ -1,5 +1,5 @@
 import { inject, Service } from '@angular/core';
-import { Usuario, CrearUsuarioDTO, ActualizarUsuarioDTO  } from '../model/usuario';
+import { Usuario, CrearUsuarioDTO, ActualizarUsuarioDTO,UsuariosPaginados } from '../model/usuario';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
@@ -9,15 +9,19 @@ export class UsuarioService {
   private baseUrl = environment.apiUrl + '/usuarios';
   private _httpClient = inject(HttpClient); //instancia de HTTPCLIENT
 
-  public async getAll(){
-    return await firstValueFrom(this._httpClient.get<Usuario[]>(this.baseUrl));
+  public async getAll(page = 1, cantidad = 10) {
+    return await firstValueFrom(
+      this._httpClient.get<UsuariosPaginados>(this.baseUrl, {
+        params: { page, cantidad },
+      }),
+    );
   }
 
-  public async getById(id:number) {
-    return await firstValueFrom(this._httpClient.get<Usuario>(`${this.baseUrl}/${id}`))
+  public async getById(id: number) {
+    return await firstValueFrom(this._httpClient.get<Usuario>(`${this.baseUrl}/${id}`));
   }
 
- /* public async getAll(): Promise<Usuario[]> {
+  /* public async getAll(): Promise<Usuario[]> {
     return [...this.usuarios];
   }
 
@@ -35,10 +39,8 @@ export class UsuarioService {
     });
   }*/
 
-  public async add(datos: CrearUsuarioDTO){
-    return await firstValueFrom(
-      this._httpClient.post<Usuario>(this.baseUrl, datos)
-    );
+  public async add(datos: CrearUsuarioDTO) {
+    return await firstValueFrom(this._httpClient.post<Usuario>(this.baseUrl, datos));
   }
 
   /*public async update(id_usuario: number, usuario: Usuario): Promise<void> {
@@ -52,14 +54,11 @@ export class UsuarioService {
     };
   }*/
 
-public async update(id: number, usuarioModificado: ActualizarUsuarioDTO) {
-  return await firstValueFrom(
-    this._httpClient.patch<Usuario>(
-      `${this.baseUrl}/${id}`,
-      usuarioModificado
-    )
-  );
-}
+  public async update(id: number, usuarioModificado: ActualizarUsuarioDTO) {
+    return await firstValueFrom(
+      this._httpClient.patch<Usuario>(`${this.baseUrl}/${id}`, usuarioModificado),
+    );
+  }
 
   /*public async remove(id_usuario: number): Promise<void> {
     const tareas = await this.tareasService.getAll();
@@ -70,8 +69,6 @@ public async update(id: number, usuarioModificado: ActualizarUsuarioDTO) {
   }*/
 
   public async remove(id: number): Promise<void> {
-  await firstValueFrom(
-    this._httpClient.delete<void>(`${this.baseUrl}/${id}`)
-  );
-}
+    await firstValueFrom(this._httpClient.delete<void>(`${this.baseUrl}/${id}`));
+  }
 }

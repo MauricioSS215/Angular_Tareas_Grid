@@ -44,3 +44,23 @@
     }
   </tbody>
 </table>
+
+@if (totalPaginas() > 0) {
+  <div>
+    <button
+      type="button"
+      (click)="page.set(page() - 1)"
+      [disabled]="page() <= 1 || usuarioResource.isLoading()"
+    >
+      Anterior
+    </button>
+
+    <button
+      type="button"
+      (click)="page.set(page() + 1)"
+      [disabled]="page() >= totalPaginas() || usuarioResource.isLoading()"
+    >
+      Siguiente
+    </button>
+  </div>
+}
