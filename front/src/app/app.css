@@ -12,26 +12,76 @@
   align-items: center;
   padding: 0 15px;
 }
-#app-medio {
-  display: flex;
-  flex: 1;
-}
 
 #app-footer {
   background-color: cyan;
 }
 
 #app-sidebar {
-  width: 240px;
   background-color: gainsboro;
+}
+
+#app-page {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Activar solo A o B.  */
+
+/* BLOQUE A: MARCO FIJO. */
+
+
+#app-layout {
+  width: 1340px;
+}
+
+#app-medio {
+  display: flex;
+  flex: 1;
+}
+
+#app-sidebar {
+  flex: 0 0 240px;
   height: 80vh;
 }
 
 #app-page {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  /* justify-content:center; */
-  align-items: center;
+  flex: 0 0 1100px;
 }
+  
+/* FIN BLOQUE A */
+
+
+
+/* BLOQUE B: MARCO RESPONSIVE CON GRID. */
+
+/*
+
+#app-layout {
+  width: 100%;
+}
+
+#app-header {
+  flex-wrap: wrap;
+}
+
+#app-medio {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  flex: 1;
+}
+
+#app-page {
+  min-width: 0;
+}
+
+@media (max-width: 639px) {
+  #app-medio {
+    grid-template-columns: 1fr;
+  }
+}
+
+*/
+/* FIN BLOQUE B */

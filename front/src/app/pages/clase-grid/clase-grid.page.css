@@ -1,0 +1,114 @@
+/* Estilos comunes: conservarlos al alternar entre los dos bloques. */
+:host {
+  display: block;
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  color: #18354e;
+}
+
+.introduccion {
+  margin-bottom: 24px;
+}
+
+.panel-curso > * {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid #c9d7e4;
+  border-radius: 8px;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
+}
+
+.cabecera-curso {
+  background: #103956;
+  color: white;
+}
+
+.etiqueta {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+
+.temas-curso {
+  background: #f2f6fa;
+}
+
+.materiales-curso {
+  background: #fff1e7;
+}
+
+.pie-curso {
+  background: #e8f2f5;
+}
+
+h3 {
+  margin: 0 0 14px;
+}
+
+li {
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+a {
+  color: #075c96;
+}
+
+/* BLOQUE A: PANEL FIJO SIN GRID */
+
+:host {
+  width: 1100px;
+}
+
+.panel-curso {
+  display: block;
+}
+
+.panel-curso > * + * {
+  margin-top: 16px;
+}
+
+/* FIN BLOQUE A */
+
+
+
+
+
+/* BLOQUE B: PANEL RESPONSIVE CON GRID. */
+
+/*
+
+:host {
+  width: 100%;
+  max-width: 1100px;
+}
+
+.panel-curso {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.panel-curso > * + * {
+  margin-top: 0;
+}
+
+@media (min-width: 1000px) {
+  .panel-curso {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  .cabecera-curso,
+  .pie-curso {
+    grid-column: 1 / -1;
+  }
+}
+
+*/
+
+/* FIN BLOQUE B */

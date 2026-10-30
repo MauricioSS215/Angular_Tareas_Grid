@@ -1,10 +1,13 @@
 :host {
   display: block;
-  width: 300px;
+  width: 100%;
+  min-width: 0;
   max-width: 100%;
+  box-sizing: border-box;
 }
 
 article {
+  box-sizing: border-box;
   height: 100%;
   padding: 20px;
   border: 1px solid #ccc;
@@ -13,6 +16,7 @@ article {
 }
 
 h3 {
+  overflow-wrap: anywhere;
   margin: -20px -20px 15px;
   padding: 12px 20px;
   background-color: #203858;

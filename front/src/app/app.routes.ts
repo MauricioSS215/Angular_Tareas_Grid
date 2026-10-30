@@ -6,6 +6,12 @@ export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', title: 'Inicio', component: HomePage },
   {
+    path: 'clase-grid',
+    title: 'Ejemplo de CSS Grid',
+    loadComponent: () =>
+      import('./pages/clase-grid/clase-grid.page').then((m) => m.ClaseGridPage),
+  },
+  {
     path: 'usuarios',
     title: 'Usuarios',
     loadComponent: () =>
