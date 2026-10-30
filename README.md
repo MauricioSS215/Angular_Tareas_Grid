@@ -1,4 +1,18 @@
-# Tarea Viernes 16 — Usuarios y tareas
+# CLase Grid Viernes 30/10/2026 — Usuarios y tareas
+
+
+Los ejemplos de CSS Grid tienen bloques **A (antes fijo)** y **B (después responsive)** en estos archivos:
+
+- [app.css](front/src/app/app.css): marco de la página, menú y área principal.
+- [listar-tareas.page.css](front/src/app/pages/tareas/listar-tareas/listar-tareas.page.css): distribución de las tarjetas de tareas.
+- [clase-grid.page.css](front/src/app/pages/clase-grid/clase-grid.page.css): distribución del panel de una materia.
+
+Para alternar, comentar A y descomentar B, dejando **un solo bloque activo por archivo**. Para ver el después completo de cada ejemplo, también debe estar activo B en `app.css`.
+
+## Usuario de prueba
+
+Username: admin
+Password: Contraseña1
 
 El repositorio contiene la API en `api` y el frontend Angular en `front`.
 
@@ -12,7 +26,6 @@ Esta entrega funciona sin autenticación ni autorización.
 Los usuarios nuevos tienen la contraseña de prueba `Prueba123`.
 Las tareas usan al primer usuario disponible como creador de ejemplo.
 
-Los archivos que paso el profesor siguen ahi en  `Archivos_TareaAngular2`.
 
 ## Dependencias
 
